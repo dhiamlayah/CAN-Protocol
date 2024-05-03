@@ -10,7 +10,7 @@ function Result({show ,setShow ,winner}) {
         <Modal.Header closeButton>
           <Modal.Title>Result</Modal.Title>
         </Modal.Header>
-        <Modal.Body>The Calculater win the bus is number : {winner + 1}</Modal.Body>
+        <Modal.Body>The Calculator  number  {winner + 1}  win the bus   </Modal.Body>
       </Modal>
     </>
   );
