@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SingleTrame from "./SingleTrame"
+import Result from "./Result";
 
 
 
@@ -8,6 +9,9 @@ import SingleTrame from "./SingleTrame"
 
 function Inputs() {
   const [numberOfCalculateur, setNumberOfCalculateur] = useState(0)
+  const [show, setShow] = useState(false);
+  const [winner, setWinner] = useState(0);
+
   const TrameFormat = {
     sof: '0',                      /* 1 bit */
     id: '1111111',                 /* 11 bit */
@@ -20,9 +24,46 @@ function Inputs() {
     eof: '1111111'                 /* 7 bit */
   }
 
+
   const [allTramesFormat, setAllTramesFormat] = useState([])
 
-  if (allTramesFormat[0]) console.log('this message frame ==>', allTramesFormat[0].dataFrame)
+  const calculateWinnerOfTheBus = (allTramesFormat) => {
+    let idWiner = 0 ;
+  
+    for (let i = 1; i < allTramesFormat.length; i++) {
+      const winner = binaryMinimum(allTramesFormat[idWiner].id,allTramesFormat[i].id)
+      if (allTramesFormat[i].id=== winner){
+        idWiner = i 
+      }
+    }
+
+    return idWiner
+
+  }
+
+  function binaryMinimum(bin1, bin2) {
+    // If the lengths of the binary numbers are different, the shorter one is considered smaller
+    if (bin1.length < bin2.length) {
+      return bin1;
+    } else if (bin2.length < bin1.length) {
+      return bin2;
+    } else {
+      // If the lengths are the same, compare digit by digit
+      for (let i = 0; i < bin1.length; i++) {
+        if (bin1[i] < bin2[i]) {
+          return bin1;
+        } else if (bin2[i] < bin1[i]) {
+          return bin2;
+        }
+      }
+      // If both binary numbers are the same
+      return bin1;
+    }
+  }
+
+
+
+
 
   return (
     <div className="mx-5 mb-3 p-3 rounded-4 border border-dark" style={{ backgroundColor: "lightslategray" }}>
@@ -42,7 +83,7 @@ function Inputs() {
 
         <div>
           <table className="table rounded-4 border border-dark">
-            <thead >  
+            <thead >
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">ID</th>
@@ -69,7 +110,16 @@ function Inputs() {
 
             </tbody>
           </table>
+          {allTramesFormat.length > 1 && <div className="d-flex justify-content-center">
+            <button type="button" className="btn btn-warning" onClick={() => {
+              const newWinner = calculateWinnerOfTheBus(allTramesFormat)
+              setWinner(newWinner)
+              setShow(true)
+            }}> Arbitration </button>
+            <Result show={show} setShow={setShow} winner={winner} />
 
+
+          </div>}
         </div>
 
       </form>
