@@ -78,6 +78,7 @@ export const calculateCAN_CRC = (nb, allTramesFormat) => {
         data = data + message
     })
 
+    //Polynôme x15+x14+x10+x8+x7+x4+x3+1x15+x14+x10+x8+x7+x4+x3+1
 
     let crc = parseInt("000000000000000", 2); // Initialisation du CRC à 0 en binaire
 
@@ -86,7 +87,7 @@ export const calculateCAN_CRC = (nb, allTramesFormat) => {
 
         for (let j = 0; j < 8; j++) {
             if ((crc & parseInt("100000000000000", 2)) !== 0) { // Si le bit de poids le plus élevé est 1
-                crc = (crc << 1) ^ parseInt("10100110011001", 2); // Opération XOR avec le polynôme CRC-15 (0x4599 en binaire)
+                crc = (crc << 1) ^ parseInt("1100010110011001", 2); // Opération XOR avec le polynôme CRC-15 (0x4599 en binaire)
             } else {
                 crc <<= 1; // Décalage du CRC d'un bit vers la gauche
             }
@@ -130,18 +131,17 @@ export const frameCalculated = (nb, allTramesFormat) => {
         data = data + message
     })
 
-    console.log("daaaataaa", data)
-
     let finalFrameBeforStuffing = allTramesFormat[nb].sof + allTramesFormat[nb].id + allTramesFormat[nb].dataType + allTramesFormat[nb].champDeCommande + data + allTramesFormat[nb].crc + allTramesFormat[nb].delemeteurOFCRC + allTramesFormat[nb].ack
     let AddStafingBitToTheFrame = addStafingBit(finalFrameBeforStuffing)
-    console.log('sof', allTramesFormat[nb].sof.length)
-    console.log('id', allTramesFormat[nb].id.length)
-    console.log('dataType', allTramesFormat[nb].dataType.length)
-    console.log('champDeCommande', allTramesFormat[nb].champDeCommande.length)
-    console.log('data', data.length)
-    console.log('crc', allTramesFormat[nb].crc.length)
-    console.log('delemeteurOFCRC', allTramesFormat[nb].delemeteurOFCRC.length)
-    console.log('ack', allTramesFormat[nb].ack.length)
+
+    console.log('sof', allTramesFormat[nb].sof)
+    console.log('id', allTramesFormat[nb].id)
+    console.log('dataType', allTramesFormat[nb].dataType)
+    console.log('champDeCommande', allTramesFormat[nb].champDeCommande)
+    console.log('data', data)
+    console.log('crc', allTramesFormat[nb].crc)
+    console.log('delemeteurOFCRC', allTramesFormat[nb].delemeteurOFCRC)
+    console.log('ack', allTramesFormat[nb].ack)
 
  
     return AddStafingBitToTheFrame + allTramesFormat[nb].eof

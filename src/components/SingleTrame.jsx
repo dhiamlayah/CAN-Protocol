@@ -26,7 +26,11 @@ const SingleTrame = ({ nb, setTrame, allTramesFormat }) => {
                     <td key={index} style={{ width: "100px" }}>
                         <input type="text" className="w-100" style={messageError ? { backgroundColor: 'red' } : {}} onChange={(e) => {
                             setSingleDataForOneTrame(nb, sizeOfMessage, e.target.value.trim(), index, setTrame, allTramesFormat, setMessageError)
-                            calculateCAN_CRC(nb, allTramesFormat)
+                            const crc = calculateCAN_CRC(nb, allTramesFormat)
+                            const newFrame = allTramesFormat
+                            newFrame[nb].crc = crc
+                            setMessageError(null)
+                            return setTrame((prev) => { return [...newFrame] })
                         }} /></td>
 
                 ))
